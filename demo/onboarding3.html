@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - Get Started</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+            overflow: hidden;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 30px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .illustration {
+            font-size: 120px;
+            margin-bottom: 40px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-15px);
+            }
+            60% {
+                transform: translateY(-7px);
+            }
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #8C6762;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .description {
+            font-size: 16px;
+            font-weight: 400;
+            color: #5A5A5A;
+            text-align: center;
+            line-height: 1.6;
+            max-width: 300px;
+            margin-bottom: 32px;
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .benefit-card {
+            background-color: #FFFFFF;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.2s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .benefit-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .benefit-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: #8C6762;
+        }
+
+        .bottom-section {
+            padding: 30px;
+        }
+
+        .indicators {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background-color: #E5E5E5;
+            transition: all 0.3s;
+        }
+
+        .indicator.active {
+            width: 24px;
+            background-color: #F7C8C0;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .start-btn:hover {
+            background-color: #F5A97F;
+            transform: scale(1.02);
+        }
+
+        .login-link {
+            text-align: center;
+            font-size: 14px;
+            color: #9B9B9B;
+        }
+
+        .login-link a {
+            color: #F7C8C0;
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="content">
+            <div class="illustration">❤️</div>
+            <h1 class="title">지금 시작하세요</h1>
+            <p class="description">
+                FemCare와 함께<br>
+                더 건강한 월경 주기를 관리해보세요
+            </p>
+
+            <div class="benefits">
+                <div class="benefit-card">
+                    <div class="benefit-icon">📊</div>
+                    <div class="benefit-text">주기 추적</div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">💬</div>
+                    <div class="benefit-text">전문가 상담</div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎁</div>
+                    <div class="benefit-text">생리대 구독</div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">👥</div>
+                    <div class="benefit-text">커뮤니티</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <div class="indicators">
+                <div class="indicator"></div>
+                <div class="indicator"></div>
+                <div class="indicator active"></div>
+            </div>
+            <button class="start-btn" onclick="startApp()">시작하기</button>
+            <div class="login-link">
+                이미 계정이 있으신가요? <a href="login.html">로그인</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startApp() {
+            // 실제로는 회원가입 화면으로 이동
+            window.location.href = 'signup.html';
+        }
+    </script>
+</body>
+</html>
