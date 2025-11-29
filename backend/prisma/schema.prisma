@@ -1,0 +1,201 @@
+// FemCare Backend - Prisma Schema
+// PostgreSQL Database Schema for AI Analysis Features
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== 사용자 ====================
+
+model User {
+  id                String     @id @default(uuid())
+  email             String     @unique
+  passwordHash      String
+  name              String
+  profileImageUrl   String?
+
+  // 구독 정보
+  subscriptionTier  SubscriptionTier  @default(FREE)
+  subscriptionEndDate DateTime?
+
+  // 분석 횟수
+  monthlyAnalysisCount Int @default(0)
+  lastAnalysisResetDate DateTime @default(now())
+
+  // Relationships
+  analyses          Analysis[]
+  healthRecords     HealthRecord[]
+
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  deletedAt         DateTime?
+
+  @@index([email])
+  @@map("users")
+}
+
+enum SubscriptionTier {
+  FREE      // 3회/월
+  PREMIUM   // 무제한
+}
+
+// ==================== AI 분석 ====================
+
+model Analysis {
+  id                String     @id @default(uuid())
+  userId            String
+  user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // 이미지 정보
+  imageUrl          String
+  thumbnailUrl      String
+  imageKey          String     // S3 key
+  imageSize         Int        // bytes
+
+  // 분석 날짜
+  analysisDate      DateTime
+
+  // 처리 상태
+  status            AnalysisStatus @default(PROCESSING)
+
+  // 전체 상태
+  overallStatus     OverallStatus?
+
+  // 출혈량 분석
+  bloodFlowLevel    Int?       // 1-5
+  bloodFlowText     String?
+  bloodFlowConfidence Float?
+  bloodFlowComment  String?
+  comparisonTrend   ComparisonTrend?
+  averageLevel      Float?
+
+  // 색상 분석
+  colorStatus       OverallStatus?
+  colorCode         String?
+  colorText         String?
+  colorConfidence   Float?
+  colorComment      String?
+  colorR            Int?
+  colorG            Int?
+  colorB            Int?
+
+  // AI 코멘트
+  aiComment         String?
+
+  // 경고
+  warningTitle      String?
+  warningMessage    String?
+  warningSeverity   WarningSeverity?
+  warningActionRequired Boolean @default(false)
+  warningActionText String?
+
+  // 메타데이터
+  modelVersion      String?
+  processingTime    Float?     // seconds
+  imageQuality      ImageQuality?
+
+  // AI 서버 정보
+  aiRequestId       String?
+  aiResponseRaw     Json?
+
+  // 추가 정보
+  notes             String?
+  symptoms          String[]   @default([])
+
+  // 저장 여부
+  saved             Boolean    @default(false)
+  savedAt           DateTime?
+
+  // 공유
+  shareToken        String?    @unique
+  shareExpiresAt    DateTime?
+
+  // Relationships
+  healthRecord      HealthRecord?
+
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  deletedAt         DateTime?
+
+  @@index([userId, createdAt])
+  @@index([userId, status])
+  @@index([userId, overallStatus])
+  @@index([shareToken])
+  @@map("analyses")
+}
+
+enum AnalysisStatus {
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum OverallStatus {
+  NORMAL
+  CAUTION
+  WARNING
+}
+
+enum ComparisonTrend {
+  SIMILAR
+  HIGHER
+  LOWER
+}
+
+enum WarningSeverity {
+  CAUTION
+  WARNING
+}
+
+enum ImageQuality {
+  GOOD
+  FAIR
+  POOR
+}
+
+// ==================== 건강 기록 ====================
+
+model HealthRecord {
+  id                String     @id @default(uuid())
+  userId            String
+  user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  analysisId        String     @unique
+  analysis          Analysis   @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+
+  recordDate        DateTime
+  notes             String?
+  tags              String[]   @default([])
+
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  @@index([userId, recordDate])
+  @@map("health_records")
+}
+
+// ==================== AI 처리 로그 ====================
+
+model AnalysisLog {
+  id                String     @id @default(uuid())
+  analysisId        String
+
+  step              String     // upload | blood_flow_analysis | color_analysis | generating_report
+  status            String     // started | completed | failed
+
+  message           String?
+  errorCode         String?
+  errorMessage      String?
+
+  metadata          Json?
+
+  createdAt         DateTime   @default(now())
+
+  @@index([analysisId, createdAt])
+  @@map("analysis_logs")
+}
