@@ -296,10 +296,54 @@ cat docs/components/home-main-components.md
 
 ### 📅 예정
 
+- [ ] 나머지 화면 구현 (52개)
+- [ ] 실제 AI 모델 연동
 - [ ] 사용자 테스트 (Alpha)
 - [ ] 성능 최적화
 - [ ] 앱스토어 배포 준비
 - [ ] 마케팅 자료 제작
+
+---
+
+## 🚀 빠른 시작
+
+### 실행 스크립트
+
+```bash
+# 실행 권한 부여
+chmod +x start.sh
+
+# 실행 메뉴
+./start.sh
+```
+
+### 백엔드 실행
+
+```bash
+cd backend
+npm install
+cp .env.example .env  # .env 파일 수정 필요
+npm run prisma:generate
+npm run prisma:migrate
+npm run start:dev
+```
+
+### 모바일 앱 실행
+
+```bash
+cd mobile
+npm install
+npm run ios    # iOS (Mac만 가능)
+npm run android  # Android
+```
+
+### HTML 프로토타입 실행
+
+```bash
+cd demo
+python3 -m http.server 8000
+# http://localhost:8000/index.html
+```
 
 ---
 
