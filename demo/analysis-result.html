@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - AI 분석 결과</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', 'Segoe UI', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* NavBar */
+        .navbar {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #F5EEE8;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        .menu-btn {
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Status Card */
+        .status-card {
+            margin: 16px 20px;
+            padding: 40px 24px;
+            background: linear-gradient(135deg, #F7C8C0 0%, #F5A97F 100%);
+            border-radius: 22px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+            text-align: center;
+            animation: fadeInScale 0.5s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .status-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            animation: bounce 1s ease-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .status-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 8px;
+        }
+
+        .status-description {
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 16px;
+        }
+
+        .timestamp {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Section */
+        .section {
+            margin: 16px 20px;
+            padding: 24px;
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+            margin-bottom: 16px;
+        }
+
+        /* Blood Flow Indicator */
+        .blood-flow-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .level-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            background-color: #E5E5E5;
+            transition: all 0.3s;
+        }
+
+        .level-dot.filled {
+            background-color: #F7C8C0;
+        }
+
+        .level-dot.active {
+            background-color: #F5A97F;
+            transform: scale(1.2);
+        }
+
+        .level-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .section-comment {
+            font-size: 14px;
+            color: #5A5A5A;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .comparison-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background-color: rgba(247, 200, 192, 0.1);
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #F7C8C0;
+            margin-top: 16px;
+        }
+
+        /* Color Indicator */
+        .color-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 16px 0;
+        }
+
+        .color-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+            background-color: #8C4A4A;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .color-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        /* AI Comment Box */
+        .ai-comment-box {
+            margin: 16px 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #FFF9F5 0%, #FFFFFF 100%);
+            border-radius: 22px;
+            border: 1px solid #F7C8C0;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .ai-comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .ai-icon {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+
+        .ai-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #F7C8C0;
+        }
+
+        .ai-message {
+            font-size: 14px;
+            color: #5A5A5A;
+            line-height: 1.6;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            margin: 16px 20px;
+            padding: 20px;
+            background-color: #FFF5F5;
+            border: 1px solid #FFE0E0;
+            border-radius: 22px;
+            animation: fadeInUp 0.7s ease-out;
+        }
+
+        .warning-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .warning-icon {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+
+        .warning-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #E89B9B;
+        }
+
+        .warning-message {
+            font-size: 14px;
+            color: #5A5A5A;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .warning-action-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #E89B9B;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .warning-action-btn:hover {
+            background-color: #D88A8A;
+        }
+
+        /* Bottom Actions */
+        .bottom-actions {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 420px;
+            width: 100%;
+            background-color: #FFFFFF;
+            border-top: 1px solid #E5E5E5;
+            padding: 16px 20px 24px;
+            display: flex;
+            gap: 12px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #F7C8C0;
+            background-color: #FFFFFF;
+            color: #F7C8C0;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: #FFF9F5;
+        }
+
+        .action-btn.primary {
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            border-color: #F7C8C0;
+        }
+
+        .action-btn.primary:hover {
+            background-color: #F5A97F;
+        }
+
+        .action-btn.primary.loading {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #7BC9A6;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Content */
+        .content {
+            padding-bottom: 120px;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #FFFFFF;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- NavBar -->
+        <div class="navbar">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <div class="navbar-title">분석 결과</div>
+            <button class="menu-btn" onclick="showToast('메뉴')">⋯</button>
+        </div>
+
+        <div class="content">
+            <!-- Status Card -->
+            <div class="status-card">
+                <div class="status-icon">✓</div>
+                <div class="status-text">양호</div>
+                <div class="status-description">전반적으로 정상입니다</div>
+                <div class="timestamp">2025.11.28 오후 3:24</div>
+            </div>
+
+            <!-- Blood Flow Section -->
+            <div class="section" style="animation-delay: 0.1s">
+                <div class="section-title">출혈량</div>
+
+                <div class="blood-flow-indicator" id="bloodFlowIndicator">
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                </div>
+
+                <div class="level-text">보통</div>
+
+                <div class="section-comment">
+                    이번 주기 평균과 비슷한 출혈량입니다.
+                </div>
+
+                <div style="text-align: center;">
+                    <span class="comparison-badge">이번 주기 평균과 비슷해요</span>
+                </div>
+            </div>
+
+            <!-- Color Section -->
+            <div class="section" style="animation-delay: 0.2s">
+                <div class="section-title">색상</div>
+
+                <div class="color-container">
+                    <div class="color-circle"></div>
+                    <div class="color-text">정상 범위</div>
+                </div>
+
+                <div class="section-comment">
+                    건강한 색상입니다.
+                </div>
+            </div>
+
+            <!-- AI Comment Box -->
+            <div class="ai-comment-box" style="animation-delay: 0.3s">
+                <div class="ai-comment-header">
+                    <div class="ai-icon">💡</div>
+                    <div class="ai-title">AI 건강 코멘트</div>
+                </div>
+                <div class="ai-message">
+                    정상적인 월경 상태입니다. 규칙적인 주기를 유지하고 있어요.
+                    현재 출혈량과 색상 모두 건강한 범위 내에 있습니다.
+                    계속해서 규칙적인 생활 습관을 유지하시면 좋을 것 같아요.
+                </div>
+            </div>
+
+            <!-- Warning Box (조건부) -->
+            <!--
+            <div class="warning-box" style="animation-delay: 0.4s; display: none;">
+                <div class="warning-header">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-title">확인이 필요해요</div>
+                </div>
+                <div class="warning-message">
+                    출혈량이 평소보다 많습니다. 전문가 상담을 권장합니다.
+                </div>
+                <button class="warning-action-btn" onclick="showToast('상담 예약 화면으로 이동')">
+                    상담 예약하기
+                </button>
+            </div>
+            -->
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="bottom-actions">
+            <button class="action-btn" onclick="showToast('상세 분석 화면으로 이동')">
+                상세 분석 보기
+            </button>
+            <button class="action-btn primary" id="saveBtn" onclick="saveRecord()">
+                기록 저장
+            </button>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        // Toast 표시
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // 뒤로가기
+        function goBack() {
+            window.location.href = 'home-main.html';
+        }
+
+        // 기록 저장
+        function saveRecord() {
+            const saveBtn = document.getElementById('saveBtn');
+
+            // 버튼 비활성화 및 로딩 표시
+            saveBtn.innerHTML = '<span class="spinner"></span>';
+            saveBtn.classList.add('loading');
+            saveBtn.disabled = true;
+
+            // 2초 후 저장 완료
+            setTimeout(() => {
+                showToast('기록이 저장되었습니다');
+
+                // 1초 후 홈으로 이동
+                setTimeout(() => {
+                    window.location.href = 'home-main.html';
+                }, 1000);
+            }, 2000);
+        }
+
+        // 페이지 로드 시 출혈량 인디케이터 애니메이션
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const dots = document.querySelectorAll('.level-dot');
+                const level = 3; // 출혈량 레벨 (1-5)
+
+                dots.forEach((dot, index) => {
+                    setTimeout(() => {
+                        if (index < level) {
+                            dot.classList.add('filled');
+                            if (index === level - 1) {
+                                dot.classList.add('active');
+                            }
+                        }
+                    }, index * 100);
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>

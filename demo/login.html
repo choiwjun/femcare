@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - 로그인</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            padding: 60px 30px 40px;
+            text-align: center;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .app-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #8C6762;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-size: 14px;
+            color: #9B9B9B;
+        }
+
+        .form-container {
+            flex: 1;
+            padding: 0 30px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #8C6762;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            background-color: #FFFFFF;
+            border: 2px solid #E5E5E5;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #8C6762;
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #F7C8C0;
+            box-shadow: 0 0 0 3px rgba(247, 200, 192, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: #C4C4C4;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        .forgot-password a {
+            font-size: 13px;
+            color: #F7C8C0;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 24px;
+        }
+
+        .login-btn:hover {
+            background-color: #F5A97F;
+            transform: scale(1.02);
+        }
+
+        .divider {
+            margin: 32px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background-color: #E5E5E5;
+        }
+
+        .divider span {
+            position: relative;
+            background-color: #F5EEE8;
+            padding: 0 16px;
+            font-size: 13px;
+            color: #9B9B9B;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 14px;
+            background-color: #FFFFFF;
+            border: 2px solid #E5E5E5;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #5A5A5A;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-btn:hover {
+            border-color: #F7C8C0;
+            transform: translateY(-2px);
+        }
+
+        .signup-link {
+            text-align: center;
+            padding: 30px;
+            font-size: 14px;
+            color: #9B9B9B;
+        }
+
+        .signup-link a {
+            color: #F7C8C0;
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="header">
+            <div class="logo">🌸</div>
+            <h1 class="app-name">FemCare</h1>
+            <p class="tagline">나를 위한 건강 파트너</p>
+        </div>
+
+        <div class="form-container">
+            <form onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label class="input-label">이메일</label>
+                    <input
+                        type="email"
+                        class="input-field"
+                        placeholder="example@email.com"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">비밀번호</label>
+                    <input
+                        type="password"
+                        class="input-field"
+                        placeholder="비밀번호를 입력하세요"
+                        required
+                    >
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#" onclick="alert('비밀번호 찾기 기능'); return false;">
+                        비밀번호를 잊으셨나요?
+                    </a>
+                </div>
+
+                <button type="submit" class="login-btn">로그인</button>
+            </form>
+
+            <div class="divider">
+                <span>또는</span>
+            </div>
+
+            <div class="social-login">
+                <button class="social-btn" onclick="alert('카카오 로그인')">
+                    <span>🟡</span>
+                    카카오
+                </button>
+                <button class="social-btn" onclick="alert('네이버 로그인')">
+                    <span>🟢</span>
+                    네이버
+                </button>
+                <button class="social-btn" onclick="alert('Google 로그인')">
+                    <span>🔵</span>
+                    Google
+                </button>
+            </div>
+        </div>
+
+        <div class="signup-link">
+            아직 계정이 없으신가요? <a href="signup.html">회원가입</a>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            // 실제로는 서버 인증 후 홈으로 이동
+            alert('로그인 성공!');
+            window.location.href = 'home-main.html';
+        }
+    </script>
+</body>
+</html>

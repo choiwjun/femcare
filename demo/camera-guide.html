@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - AI 분석 가이드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .navbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        .spacer {
+            width: 36px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .guide-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .guide-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .guide-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8C6762;
+            margin-bottom: 8px;
+        }
+
+        .guide-subtitle {
+            font-size: 15px;
+            color: #9B9B9B;
+        }
+
+        .guide-steps {
+            flex: 1;
+            margin-bottom: 20px;
+        }
+
+        .step-card {
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            animation: fadeInUp 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .step-card:nth-child(1) { animation-delay: 0.1s; }
+        .step-card:nth-child(2) { animation-delay: 0.2s; }
+        .step-card:nth-child(3) { animation-delay: 0.3s; }
+        .step-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #F7C8C0 0%, #F5A97F 100%);
+            color: #FFFFFF;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: #5A5A5A;
+            line-height: 1.6;
+            margin-left: 44px;
+        }
+
+        .tip-box {
+            background-color: rgba(247, 200, 192, 0.1);
+            border: 1px solid #F7C8C0;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .tip-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .tip-icon {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+
+        .tip-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #F7C8C0;
+        }
+
+        .tip-text {
+            font-size: 13px;
+            color: #5A5A5A;
+            line-height: 1.5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border-top: 1px solid #E5E5E5;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary {
+            background-color: #FFFFFF;
+            color: #F7C8C0;
+            border: 2px solid #F7C8C0;
+        }
+
+        .btn-secondary:hover {
+            background-color: #FFF9F5;
+        }
+
+        .btn-primary {
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+        }
+
+        .btn-primary:hover {
+            background-color: #F5A97F;
+            transform: scale(1.02);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #7BC9A6;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="navbar">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <div class="navbar-title">AI 분석 가이드</div>
+            <div class="spacer"></div>
+        </div>
+
+        <div class="content">
+            <div class="guide-header">
+                <div class="guide-icon">📸</div>
+                <h1 class="guide-title">생리대 촬영 가이드</h1>
+                <p class="guide-subtitle">정확한 AI 분석을 위해 아래 가이드를 따라주세요</p>
+            </div>
+
+            <div class="guide-steps">
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div class="step-title">밝은 곳에서 촬영</div>
+                    </div>
+                    <div class="step-description">
+                        자연광이 있는 밝은 곳에서 촬영하면 더 정확한 색상 분석이 가능합니다. 어두운 곳이나 조명이 너무 강한 곳은 피해주세요.
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <div class="step-title">생리대 중앙 부분 촬영</div>
+                    </div>
+                    <div class="step-description">
+                        생리대의 중앙 부분이 화면 중앙에 오도록 배치하고, 가이드 라인 안에 맞춰 촬영해 주세요.
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <div class="step-title">흔들림 없이 선명하게</div>
+                    </div>
+                    <div class="step-description">
+                        카메라가 흔들리지 않도록 고정한 후 촬영해 주세요. 흐릿한 사진은 분석이 어려울 수 있습니다.
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <div class="step-title">적절한 거리 유지</div>
+                    </div>
+                    <div class="step-description">
+                        생리대 전체가 화면에 들어올 수 있도록 적절한 거리를 유지해 주세요. 너무 가깝거나 멀지 않게 촬영하세요.
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-header">
+                    <span class="tip-icon">💡</span>
+                    <span class="tip-title">촬영 팁</span>
+                </div>
+                <div class="tip-text">
+                    • 배경은 흰색 또는 밝은 색상이 좋아요<br>
+                    • 그림자가 생기지 않도록 주의해주세요<br>
+                    • 생리대가 펼쳐진 상태로 촬영해주세요
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-secondary" onclick="skipGuide()">건너뛰기</button>
+            <button class="btn btn-primary" onclick="startCamera()">카메라 시작</button>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        function goBack() {
+            window.location.href = 'home-main.html';
+        }
+
+        function skipGuide() {
+            showToast('카메라 화면으로 이동합니다');
+            setTimeout(() => {
+                // 실제로는 카메라 화면으로 이동
+                showToast('카메라 기능은 실제 앱에서 사용 가능합니다');
+            }, 1000);
+        }
+
+        function startCamera() {
+            showToast('카메라 기능은 실제 앱에서 사용 가능합니다');
+            // 실제로는 카메라 화면으로 이동
+            // setTimeout(() => {
+            //     window.location.href = 'camera.html';
+            // }, 1500);
+        }
+    </script>
+</body>
+</html>

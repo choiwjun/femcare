@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - 기부하기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding-bottom: 20px;
+        }
+
+        .navbar {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .navbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        .share-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 0 20px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #F7C8C0 0%, #F5A97F 100%);
+            border-radius: 22px;
+            padding: 32px 24px;
+            margin-bottom: 20px;
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        .hero-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .hero-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .hero-subtitle {
+            font-size: 15px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .progress-section {
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .progress-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background-color: #F5EEE8;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #F7C8C0 0%, #F5A97F 100%);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            color: #9B9B9B;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #F7C8C0;
+        }
+
+        .amount-section {
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+            margin-bottom: 16px;
+        }
+
+        .amount-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .amount-option {
+            padding: 16px;
+            border: 2px solid #E5E5E5;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        .amount-option:hover {
+            border-color: #F7C8C0;
+            background-color: #FFF9F5;
+        }
+
+        .amount-option.selected {
+            border-color: #F7C8C0;
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+        }
+
+        .custom-amount {
+            padding: 16px;
+            border: 2px solid #E5E5E5;
+            border-radius: 16px;
+            font-size: 16px;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .custom-amount:focus {
+            outline: none;
+            border-color: #F7C8C0;
+        }
+
+        .impact-section {
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .impact-items {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .impact-item {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+
+        .impact-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .impact-text {
+            flex: 1;
+        }
+
+        .impact-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #8C6762;
+            margin-bottom: 4px;
+        }
+
+        .impact-description {
+            font-size: 13px;
+            color: #9B9B9B;
+            line-height: 1.5;
+        }
+
+        .donate-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(247, 200, 192, 0.3);
+        }
+
+        .donate-btn:hover {
+            background-color: #F5A97F;
+            transform: scale(1.02);
+            box-shadow: 0 6px 16px rgba(247, 200, 192, 0.4);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #7BC9A6;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="navbar">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <div class="navbar-title">기부하기</div>
+            <button class="share-btn" onclick="shareChallenge()">↗</button>
+        </div>
+
+        <div class="content">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <div class="hero-icon">💝</div>
+                <div class="hero-title">함께 만드는 변화</div>
+                <div class="hero-subtitle">
+                    월경 빈곤으로 어려움을 겪는<br>
+                    청소년들에게 희망을 전달합니다
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section">
+                <div class="progress-title">이번 달 챌린지</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 67%;"></div>
+                </div>
+                <div class="progress-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">현재 모금액</span>
+                        <span class="stat-value">670만원</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">목표 금액</span>
+                        <span class="stat-value">1,000만원</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">참여자</span>
+                        <span class="stat-value">2,341명</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Amount Selection -->
+            <div class="amount-section">
+                <div class="section-title">기부 금액 선택</div>
+                <div class="amount-options">
+                    <div class="amount-option" data-amount="5000">5,000원</div>
+                    <div class="amount-option selected" data-amount="10000">10,000원</div>
+                    <div class="amount-option" data-amount="30000">30,000원</div>
+                    <div class="amount-option" data-amount="50000">50,000원</div>
+                    <div class="amount-option" data-amount="100000">100,000원</div>
+                    <div class="amount-option" data-amount="custom">직접입력</div>
+                </div>
+                <input type="number" class="custom-amount" placeholder="금액을 입력하세요" style="display: none;">
+            </div>
+
+            <!-- Impact Section -->
+            <div class="impact-section">
+                <div class="section-title">기부 효과</div>
+                <div class="impact-items">
+                    <div class="impact-item">
+                        <div class="impact-icon">🌸</div>
+                        <div class="impact-text">
+                            <div class="impact-title">생리대 지원</div>
+                            <div class="impact-description">
+                                월경 빈곤 청소년들에게 위생용품을 제공합니다
+                            </div>
+                        </div>
+                    </div>
+                    <div class="impact-item">
+                        <div class="impact-icon">📚</div>
+                        <div class="impact-text">
+                            <div class="impact-title">건강 교육</div>
+                            <div class="impact-description">
+                                올바른 월경 건강 지식을 교육합니다
+                            </div>
+                        </div>
+                    </div>
+                    <div class="impact-item">
+                        <div class="impact-icon">💪</div>
+                        <div class="impact-text">
+                            <div class="impact-title">자존감 회복</div>
+                            <div class="impact-description">
+                                건강한 월경 문화를 만들어갑니다
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="donate-btn" onclick="processDonation()">10,000원 기부하기</button>
+        </div>
+
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        let selectedAmount = 10000;
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function goBack() {
+            window.location.href = 'home-main.html';
+        }
+
+        function shareChallenge() {
+            showToast('공유하기 기능');
+        }
+
+        function processDonation() {
+            showToast(`${selectedAmount.toLocaleString()}원 기부가 완료되었습니다!`);
+            setTimeout(() => {
+                goBack();
+            }, 2000);
+        }
+
+        // Amount selection
+        document.querySelectorAll('.amount-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.amount-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+
+                const amount = this.dataset.amount;
+                const customInput = document.querySelector('.custom-amount');
+
+                if (amount === 'custom') {
+                    customInput.style.display = 'block';
+                    customInput.focus();
+                } else {
+                    customInput.style.display = 'none';
+                    selectedAmount = parseInt(amount);
+                    updateDonateButton();
+                }
+            });
+        });
+
+        // Custom amount input
+        document.querySelector('.custom-amount').addEventListener('input', function() {
+            selectedAmount = parseInt(this.value) || 0;
+            updateDonateButton();
+        });
+
+        function updateDonateButton() {
+            const btn = document.querySelector('.donate-btn');
+            btn.textContent = `${selectedAmount.toLocaleString()}원 기부하기`;
+        }
+    </script>
+</body>
+</html>

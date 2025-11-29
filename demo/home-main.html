@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - 홈 메인 화면</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', 'Segoe UI', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Header */
+        .header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .greeting {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8C6762;
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: #FFFFFF;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background-color: #F7C8C0;
+            border-radius: 4px;
+        }
+
+        /* Period Card */
+        .period-card {
+            margin: 16px 20px;
+            padding: 32px 24px;
+            background: linear-gradient(135deg, #F7C8C0 0%, #F5EEE8 100%);
+            border-radius: 22px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .period-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 16px;
+        }
+
+        .period-date {
+            font-size: 28px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 8px;
+        }
+
+        .d-day {
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            margin-left: 8px;
+        }
+
+        /* Cycle Progress */
+        .cycle-progress {
+            margin: 24px 0;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            width: 45%;
+            transition: width 0.8s ease-out;
+        }
+
+        .phase-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+
+        .phase-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Button */
+        .record-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #FFFFFF;
+            color: #F7C8C0;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: all 0.2s;
+        }
+
+        .record-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .record-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            margin: 24px 20px;
+        }
+
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .quick-action-item {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .quick-action-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .quick-action-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .quick-action-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #8C6762;
+        }
+
+        /* Tip Banner */
+        .tip-banner {
+            margin: 16px 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #FFF9F5 0%, #FFFFFF 100%);
+            border-radius: 22px;
+            border: 1px solid #F7C8C0;
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tip-banner:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 200, 192, 0.2);
+        }
+
+        .tip-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        .tip-content {
+            flex: 1;
+        }
+
+        .tip-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #F7C8C0;
+            margin-bottom: 4px;
+        }
+
+        .tip-message {
+            font-size: 13px;
+            color: #5A5A5A;
+            line-height: 1.5;
+        }
+
+        /* Donation Card */
+        .donation-card {
+            margin: 16px 20px;
+            padding: 24px;
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .donation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .donation-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        .donation-detail-btn {
+            font-size: 13px;
+            color: #9B9B9B;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .donation-progress-bg {
+            width: 100%;
+            height: 12px;
+            background-color: #F5EEE8;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .donation-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #F7C8C0 0%, #F5A97F 100%);
+            border-radius: 6px;
+            width: 67%;
+            transition: width 1s ease-out;
+        }
+
+        .donation-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .donation-amount {
+            font-size: 14px;
+            color: #5A5A5A;
+        }
+
+        .donation-amount strong {
+            color: #F7C8C0;
+            font-weight: 700;
+        }
+
+        .donate-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .donate-btn:hover {
+            background-color: #F5A97F;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 420px;
+            width: 100%;
+            background-color: #FFFFFF;
+            border-top: 1px solid #E5E5E5;
+            padding: 12px 0 20px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .tab-label {
+            font-size: 11px;
+            color: #9B9B9B;
+            transition: all 0.2s;
+        }
+
+        .tab-item.active .tab-icon {
+            color: #F7C8C0;
+        }
+
+        .tab-item.active .tab-label {
+            color: #F7C8C0;
+            font-weight: 600;
+        }
+
+        .tab-item:hover .tab-icon {
+            transform: scale(1.1);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Spacing */
+        .content {
+            padding-bottom: 100px;
+        }
+
+        /* Loading Animation */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="greeting">안녕하세요, 지은님 👋</div>
+            <button class="notification-btn" onclick="showToast('알림 2개가 있습니다')">
+                🔔
+                <div class="notification-badge"></div>
+            </button>
+        </div>
+
+        <div class="content">
+            <!-- Period Card -->
+            <div class="period-card">
+                <div class="period-card-title">다음 생리 예정일</div>
+                <div>
+                    <span class="period-date">12월 15일</span>
+                    <span class="d-day">(D-17)</span>
+                </div>
+
+                <div class="cycle-progress">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill"></div>
+                    </div>
+                    <div class="phase-labels">
+                        <span class="phase-label">생리기</span>
+                        <span class="phase-label">배란기</span>
+                        <span class="phase-label">생리전기</span>
+                    </div>
+                </div>
+
+                <button class="record-btn" onclick="showToast('증상 기록 화면으로 이동')">기록하기</button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="quick-actions-grid">
+                    <div class="quick-action-item" onclick="goToAnalysis()">
+                        <div class="quick-action-icon">📸</div>
+                        <div class="quick-action-label">AI 분석</div>
+                    </div>
+                    <div class="quick-action-item" onclick="showToast('캘린더 화면으로 이동')">
+                        <div class="quick-action-icon">📅</div>
+                        <div class="quick-action-label">캘린더</div>
+                    </div>
+                    <div class="quick-action-item" onclick="showToast('구독 관리 화면으로 이동')">
+                        <div class="quick-action-icon">📦</div>
+                        <div class="quick-action-label">구독 관리</div>
+                    </div>
+                    <div class="quick-action-item" onclick="showToast('건강 리포트 화면으로 이동')">
+                        <div class="quick-action-icon">📊</div>
+                        <div class="quick-action-label">건강 리포트</div>
+                    </div>
+                    <div class="quick-action-item" onclick="showToast('상담 예약 화면으로 이동')">
+                        <div class="quick-action-icon">💬</div>
+                        <div class="quick-action-label">상담 예약</div>
+                    </div>
+                    <div class="quick-action-item" onclick="showToast('커뮤니티 화면으로 이동')">
+                        <div class="quick-action-icon">👥</div>
+                        <div class="quick-action-label">커뮤니티</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tip Banner -->
+            <div class="tip-banner" onclick="showToast('건강 팁 상세보기')">
+                <div class="tip-icon">💡</div>
+                <div class="tip-content">
+                    <div class="tip-title">오늘의 건강 팁</div>
+                    <div class="tip-message">규칙적인 생활 습관이 건강한 월경 주기를 유지하는 데 도움이 됩니다.</div>
+                </div>
+            </div>
+
+            <!-- Donation Card -->
+            <div class="donation-card">
+                <div class="donation-header">
+                    <div class="donation-title">이달의 기부 프로젝트 ❤️</div>
+                    <button class="donation-detail-btn" onclick="showToast('기부 상세 화면으로 이동')">자세히 →</button>
+                </div>
+
+                <div class="donation-progress-bg">
+                    <div class="donation-progress-fill"></div>
+                </div>
+
+                <div class="donation-info">
+                    <div class="donation-amount">
+                        <strong>670만원</strong> / 1,000만원
+                    </div>
+                    <div class="donation-amount">참여 <strong>234명</strong></div>
+                </div>
+
+                <button class="donate-btn" onclick="showToast('기부하기 화면으로 이동')">기부하기</button>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <div class="tab-item active">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">홈</div>
+            </div>
+            <div class="tab-item" onclick="showToast('캘린더 화면으로 이동')">
+                <div class="tab-icon">📅</div>
+                <div class="tab-label">캘린더</div>
+            </div>
+            <div class="tab-item" onclick="showToast('구독 화면으로 이동')">
+                <div class="tab-icon">📦</div>
+                <div class="tab-label">구독</div>
+            </div>
+            <div class="tab-item" onclick="showToast('상담 화면으로 이동')">
+                <div class="tab-icon">💬</div>
+                <div class="tab-label">상담</div>
+            </div>
+            <div class="tab-item" onclick="showToast('마이페이지 화면으로 이동')">
+                <div class="tab-icon">👤</div>
+                <div class="tab-label">마이페이지</div>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        // Toast 표시
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // AI 분석 화면으로 이동
+        function goToAnalysis() {
+            window.location.href = 'analysis-result.html';
+        }
+
+        // 페이지 로드 시 애니메이션
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.progress-bar-fill').style.width = '45%';
+                document.querySelector('.donation-progress-fill').style.width = '67%';
+            }, 300);
+        });
+    </script>
+</body>
+</html>

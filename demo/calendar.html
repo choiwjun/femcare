@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - 캘린더</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding-bottom: 80px;
+        }
+
+        .navbar {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #F5EEE8;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .navbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 0 20px 20px;
+        }
+
+        .month-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .month-nav-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #F7C8C0;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .month-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #8C6762;
+        }
+
+        .calendar {
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: 12px;
+        }
+
+        .weekday {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #9B9B9B;
+            padding: 8px 0;
+        }
+
+        .weekday.sunday {
+            color: #E89B9B;
+        }
+
+        .weekday.saturday {
+            color: #A8C5E8;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .day:hover {
+            background-color: rgba(247, 200, 192, 0.1);
+        }
+
+        .day.empty {
+            cursor: default;
+        }
+
+        .day.empty:hover {
+            background-color: transparent;
+        }
+
+        .day.today {
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            font-weight: 700;
+        }
+
+        .day.period {
+            background: linear-gradient(135deg, #F7C8C0 0%, #F5A97F 100%);
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+
+        .day.predicted {
+            background-color: rgba(247, 200, 192, 0.3);
+            color: #8C6762;
+        }
+
+        .day.symptom::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 4px;
+            height: 4px;
+            background-color: #7BC9A6;
+            border-radius: 2px;
+        }
+
+        .legend {
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
+        }
+
+        .legend-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+            margin-bottom: 16px;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+        }
+
+        .legend-color.period {
+            background: linear-gradient(135deg, #F7C8C0 0%, #F5A97F 100%);
+        }
+
+        .legend-color.predicted {
+            background-color: rgba(247, 200, 192, 0.3);
+        }
+
+        .legend-color.symptom {
+            background-color: #7BC9A6;
+        }
+
+        .legend-label {
+            font-size: 13px;
+            color: #5A5A5A;
+        }
+
+        .cycle-info {
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .cycle-info-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+            margin-bottom: 16px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #F5EEE8;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: #5A5A5A;
+        }
+
+        .info-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 420px;
+            width: 100%;
+            background-color: #FFFFFF;
+            border-top: 1px solid #E5E5E5;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 8px 16px;
+            transition: all 0.2s;
+        }
+
+        .tab-icon {
+            font-size: 24px;
+        }
+
+        .tab-label {
+            font-size: 11px;
+            color: #9B9B9B;
+        }
+
+        .tab-item.active .tab-label {
+            color: #F7C8C0;
+            font-weight: 600;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #7BC9A6;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="navbar">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <div class="navbar-title">캘린더</div>
+            <button class="menu-btn" onclick="showToast('메뉴')">⋯</button>
+        </div>
+
+        <div class="content">
+            <!-- Month Selector -->
+            <div class="month-selector">
+                <button class="month-nav-btn" onclick="prevMonth()">←</button>
+                <div class="month-text" id="monthText">2025년 11월</div>
+                <button class="month-nav-btn" onclick="nextMonth()">→</button>
+            </div>
+
+            <!-- Calendar -->
+            <div class="calendar">
+                <div class="weekdays">
+                    <div class="weekday sunday">일</div>
+                    <div class="weekday">월</div>
+                    <div class="weekday">화</div>
+                    <div class="weekday">수</div>
+                    <div class="weekday">목</div>
+                    <div class="weekday">금</div>
+                    <div class="weekday saturday">토</div>
+                </div>
+
+                <div class="days" id="calendarDays">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="legend">
+                <div class="legend-title">범례</div>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-color period"></div>
+                        <span class="legend-label">생리일</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color predicted"></div>
+                        <span class="legend-label">예정일</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color symptom"></div>
+                        <span class="legend-label">증상 기록</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cycle Info -->
+            <div class="cycle-info">
+                <div class="cycle-info-title">이번 주기 정보</div>
+                <div class="info-row">
+                    <span class="info-label">평균 주기</span>
+                    <span class="info-value">28일</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">평균 생리 기간</span>
+                    <span class="info-value">5일</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">다음 생리 예정일</span>
+                    <span class="info-value">12월 15일</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">현재 주기</span>
+                    <span class="info-value">13일차 (난포기)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <div class="tab-item" onclick="navigateToTab('home')">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">홈</div>
+            </div>
+            <div class="tab-item active">
+                <div class="tab-icon">📅</div>
+                <div class="tab-label">캘린더</div>
+            </div>
+            <div class="tab-item" onclick="navigateToTab('subscription')">
+                <div class="tab-icon">📦</div>
+                <div class="tab-label">구독</div>
+            </div>
+            <div class="tab-item" onclick="navigateToTab('consultation')">
+                <div class="tab-icon">💬</div>
+                <div class="tab-label">상담</div>
+            </div>
+            <div class="tab-item" onclick="navigateToTab('mypage')">
+                <div class="tab-icon">👤</div>
+                <div class="tab-label">마이</div>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        let currentYear = 2025;
+        let currentMonth = 10; // 11월 (0-based)
+
+        // 캘린더 렌더링
+        function renderCalendar() {
+            const monthText = document.getElementById('monthText');
+            monthText.textContent = `${currentYear}년 ${currentMonth + 1}월`;
+
+            const daysContainer = document.getElementById('calendarDays');
+            daysContainer.innerHTML = '';
+
+            // 첫 날과 마지막 날
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            // 더미 데이터: 생리일, 예정일, 증상 기록
+            const periodDays = [2, 3, 4, 5, 6]; // 생리일
+            const predictedDays = [30]; // 예정일 (다음 달 예정이지만 표시용)
+            const symptomDays = [10, 15, 20]; // 증상 기록일
+            const today = 28; // 오늘 날짜
+
+            // 빈 셀 추가 (첫 날 이전)
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'day empty';
+                daysContainer.appendChild(emptyDay);
+            }
+
+            // 날짜 추가
+            for (let date = 1; date <= lastDate; date++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day';
+                dayDiv.textContent = date;
+
+                if (date === today) {
+                    dayDiv.classList.add('today');
+                } else if (periodDays.includes(date)) {
+                    dayDiv.classList.add('period');
+                } else if (predictedDays.includes(date)) {
+                    dayDiv.classList.add('predicted');
+                }
+
+                if (symptomDays.includes(date)) {
+                    dayDiv.classList.add('symptom');
+                }
+
+                dayDiv.onclick = () => showToast(`${currentMonth + 1}월 ${date}일`);
+
+                daysContainer.appendChild(dayDiv);
+            }
+        }
+
+        function prevMonth() {
+            if (currentMonth === 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else {
+                currentMonth--;
+            }
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            if (currentMonth === 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else {
+                currentMonth++;
+            }
+            renderCalendar();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        function goBack() {
+            window.location.href = 'home-main.html';
+        }
+
+        function navigateToTab(tab) {
+            const routes = {
+                'home': 'home-main.html',
+                'subscription': 'subscription.html',
+                'consultation': 'consultation.html',
+                'mypage': 'mypage.html'
+            };
+
+            if (routes[tab]) {
+                window.location.href = routes[tab];
+            } else {
+                showToast(`${tab} 화면으로 이동`);
+            }
+        }
+
+        // 초기 렌더링
+        renderCalendar();
+    </script>
+</body>
+</html>

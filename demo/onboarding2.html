@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - AI 분석</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+            overflow: hidden;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .skip-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 15px;
+            font-weight: 500;
+            color: #9B9B9B;
+            cursor: pointer;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 30px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .illustration {
+            font-size: 120px;
+            margin-bottom: 40px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #8C6762;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .description {
+            font-size: 16px;
+            font-weight: 400;
+            color: #5A5A5A;
+            text-align: center;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .features {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #8C6762;
+        }
+
+        .bottom-section {
+            padding: 30px;
+        }
+
+        .indicators {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background-color: #E5E5E5;
+            transition: all 0.3s;
+        }
+
+        .indicator.active {
+            width: 24px;
+            background-color: #F7C8C0;
+        }
+
+        .next-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .next-btn:hover {
+            background-color: #F5A97F;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <button class="skip-btn" onclick="goToLogin()">건너뛰기</button>
+
+        <div class="content">
+            <div class="illustration">📸</div>
+            <h1 class="title">AI 기반<br>월경 분석</h1>
+            <p class="description">
+                사진 한 장으로 간편하게<br>
+                월경 상태를 분석해보세요
+            </p>
+
+            <div class="features">
+                <div class="feature-item">
+                    <div class="feature-icon">🩸</div>
+                    <div class="feature-text">출혈량 자동 측정</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-text">색상 분석</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💡</div>
+                    <div class="feature-text">AI 건강 코멘트</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <div class="indicators">
+                <div class="indicator"></div>
+                <div class="indicator active"></div>
+                <div class="indicator"></div>
+            </div>
+            <button class="next-btn" onclick="nextPage()">다음</button>
+        </div>
+    </div>
+
+    <script>
+        function nextPage() {
+            window.location.href = 'onboarding3.html';
+        }
+
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

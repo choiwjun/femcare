@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - 회원가입</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .navbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        .spacer {
+            width: 36px;
+        }
+
+        .content {
+            padding: 20px 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #8C6762;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 15px;
+            color: #9B9B9B;
+            margin-bottom: 32px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #8C6762;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            background-color: #FFFFFF;
+            border: 2px solid #E5E5E5;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #8C6762;
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #F7C8C0;
+            box-shadow: 0 0 0 3px rgba(247, 200, 192, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: #C4C4C4;
+        }
+
+        .checkbox-group {
+            margin: 24px 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px;
+            background-color: #FFFFFF;
+            border-radius: 12px;
+        }
+
+        .checkbox {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+            color: #5A5A5A;
+            flex: 1;
+        }
+
+        .view-link {
+            font-size: 13px;
+            color: #F7C8C0;
+            text-decoration: none;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 24px;
+        }
+
+        .signup-btn:hover {
+            background-color: #F5A97F;
+            transform: scale(1.02);
+        }
+
+        .signup-btn:disabled {
+            background-color: #E5E5E5;
+            cursor: not-allowed;
+        }
+
+        .login-link {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #9B9B9B;
+        }
+
+        .login-link a {
+            color: #F7C8C0;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #9B9B9B;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="navbar">
+            <button class="back-btn" onclick="history.back()">←</button>
+            <div class="navbar-title">회원가입</div>
+            <div class="spacer"></div>
+        </div>
+
+        <div class="content">
+            <h1 class="page-title">환영합니다! 👋</h1>
+            <p class="page-subtitle">건강한 월경 관리를 시작해보세요</p>
+
+            <form onsubmit="handleSignup(event)">
+                <div class="input-group">
+                    <label class="input-label">이름</label>
+                    <input
+                        type="text"
+                        class="input-field"
+                        placeholder="이름을 입력하세요"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">이메일</label>
+                    <input
+                        type="email"
+                        class="input-field"
+                        placeholder="example@email.com"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">비밀번호</label>
+                    <input
+                        type="password"
+                        class="input-field"
+                        placeholder="8자 이상 입력하세요"
+                        minlength="8"
+                        required
+                    >
+                    <p class="help-text">영문, 숫자를 포함하여 8자 이상</p>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">비밀번호 확인</label>
+                    <input
+                        type="password"
+                        class="input-field"
+                        placeholder="비밀번호를 다시 입력하세요"
+                        minlength="8"
+                        required
+                    >
+                </div>
+
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="all" class="checkbox">
+                        <label for="all" class="checkbox-label">
+                            <strong>전체 동의</strong>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="terms" class="checkbox" required>
+                        <label for="terms" class="checkbox-label">
+                            [필수] 서비스 이용약관
+                        </label>
+                        <a href="#" class="view-link">보기</a>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="privacy" class="checkbox" required>
+                        <label for="privacy" class="checkbox-label">
+                            [필수] 개인정보 처리방침
+                        </label>
+                        <a href="#" class="view-link">보기</a>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="marketing" class="checkbox">
+                        <label for="marketing" class="checkbox-label">
+                            [선택] 마케팅 정보 수신 동의
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="signup-btn">가입하기</button>
+            </form>
+
+            <div class="login-link">
+                이미 계정이 있으신가요? <a href="login.html">로그인</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 전체 동의 체크박스
+        document.getElementById('all').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.checkbox-item .checkbox');
+            checkboxes.forEach(cb => {
+                cb.checked = this.checked;
+            });
+        });
+
+        function handleSignup(event) {
+            event.preventDefault();
+            alert('회원가입 성공! 로그인 화면으로 이동합니다.');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
