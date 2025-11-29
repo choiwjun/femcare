@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - 상담 예약</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding-bottom: 80px;
+        }
+
+        .navbar {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .navbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        .spacer {
+            width: 36px;
+        }
+
+        .content {
+            padding: 0 20px 20px;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, #F7C8C0 0%, #F5A97F 100%);
+            border-radius: 22px;
+            padding: 24px;
+            margin-bottom: 20px;
+            color: #FFFFFF;
+        }
+
+        .header-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .section {
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+            margin-bottom: 16px;
+        }
+
+        .doctor-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .doctor-card {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 2px solid #E5E5E5;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .doctor-card:hover {
+            border-color: #F7C8C0;
+            background-color: #FFF9F5;
+        }
+
+        .doctor-card.selected {
+            border-color: #F7C8C0;
+            background-color: rgba(247, 200, 192, 0.1);
+        }
+
+        .doctor-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #F7C8C0 0%, #F5A97F 100%);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        .doctor-info {
+            flex: 1;
+        }
+
+        .doctor-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+            margin-bottom: 4px;
+        }
+
+        .doctor-specialty {
+            font-size: 13px;
+            color: #9B9B9B;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .time-slot {
+            padding: 12px;
+            border: 2px solid #E5E5E5;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .time-slot:hover {
+            border-color: #F7C8C0;
+            background-color: #FFF9F5;
+        }
+
+        .time-slot.selected {
+            border-color: #F7C8C0;
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+
+        .time-slot.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .time-slot.disabled:hover {
+            border-color: #E5E5E5;
+            background-color: transparent;
+        }
+
+        .consultation-types {
+            display: flex;
+            gap: 12px;
+        }
+
+        .type-option {
+            flex: 1;
+            padding: 16px;
+            border: 2px solid #E5E5E5;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .type-option:hover {
+            border-color: #F7C8C0;
+            background-color: #FFF9F5;
+        }
+
+        .type-option.selected {
+            border-color: #F7C8C0;
+            background-color: rgba(247, 200, 192, 0.1);
+        }
+
+        .type-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .type-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .confirm-btn:hover {
+            background-color: #F5A97F;
+            transform: scale(1.02);
+        }
+
+        .confirm-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 420px;
+            width: 100%;
+            background-color: #FFFFFF;
+            border-top: 1px solid #E5E5E5;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 8px 16px;
+        }
+
+        .tab-icon {
+            font-size: 24px;
+        }
+
+        .tab-label {
+            font-size: 11px;
+            color: #9B9B9B;
+        }
+
+        .tab-item.active .tab-label {
+            color: #F7C8C0;
+            font-weight: 600;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #7BC9A6;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="navbar">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <div class="navbar-title">상담 예약</div>
+            <div class="spacer"></div>
+        </div>
+
+        <div class="content">
+            <!-- Header -->
+            <div class="header-section">
+                <div class="header-icon">💬</div>
+                <div class="header-title">전문가 상담 예약</div>
+                <div class="header-subtitle">산부인과 전문의와 1:1 상담을 진행하세요</div>
+            </div>
+
+            <!-- Consultation Type -->
+            <div class="section">
+                <div class="section-title">상담 방식</div>
+                <div class="consultation-types">
+                    <div class="type-option selected" data-type="video">
+                        <div class="type-icon">📹</div>
+                        <div class="type-label">화상 상담</div>
+                    </div>
+                    <div class="type-option" data-type="chat">
+                        <div class="type-icon">💬</div>
+                        <div class="type-label">채팅 상담</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor Selection -->
+            <div class="section">
+                <div class="section-title">전문의 선택</div>
+                <div class="doctor-list">
+                    <div class="doctor-card selected" data-doctor="dr-kim">
+                        <div class="doctor-avatar">👩‍⚕️</div>
+                        <div class="doctor-info">
+                            <div class="doctor-name">김미연 전문의</div>
+                            <div class="doctor-specialty">산부인과 전문의 • 15년 경력</div>
+                        </div>
+                    </div>
+                    <div class="doctor-card" data-doctor="dr-lee">
+                        <div class="doctor-avatar">👨‍⚕️</div>
+                        <div class="doctor-info">
+                            <div class="doctor-name">이준호 전문의</div>
+                            <div class="doctor-specialty">산부인과 전문의 • 12년 경력</div>
+                        </div>
+                    </div>
+                    <div class="doctor-card" data-doctor="dr-park">
+                        <div class="doctor-avatar">👩‍⚕️</div>
+                        <div class="doctor-info">
+                            <div class="doctor-name">박서연 전문의</div>
+                            <div class="doctor-specialty">산부인과 전문의 • 10년 경력</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Slots -->
+            <div class="section">
+                <div class="section-title">상담 시간 선택</div>
+                <div class="time-slots">
+                    <div class="time-slot disabled">09:00</div>
+                    <div class="time-slot">10:00</div>
+                    <div class="time-slot selected">11:00</div>
+                    <div class="time-slot">14:00</div>
+                    <div class="time-slot">15:00</div>
+                    <div class="time-slot">16:00</div>
+                    <div class="time-slot disabled">17:00</div>
+                    <div class="time-slot">18:00</div>
+                    <div class="time-slot">19:00</div>
+                </div>
+            </div>
+
+            <!-- Confirm Button -->
+            <button class="confirm-btn" onclick="confirmReservation()">예약 확정하기</button>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <div class="tab-item" onclick="navigateToTab('home')">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">홈</div>
+            </div>
+            <div class="tab-item" onclick="navigateToTab('calendar')">
+                <div class="tab-icon">📅</div>
+                <div class="tab-label">캘린더</div>
+            </div>
+            <div class="tab-item" onclick="navigateToTab('subscription')">
+                <div class="tab-icon">📦</div>
+                <div class="tab-label">구독</div>
+            </div>
+            <div class="tab-item active">
+                <div class="tab-icon">💬</div>
+                <div class="tab-label">상담</div>
+            </div>
+            <div class="tab-item" onclick="navigateToTab('mypage')">
+                <div class="tab-icon">👤</div>
+                <div class="tab-label">마이</div>
+            </div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function goBack() {
+            window.location.href = 'home-main.html';
+        }
+
+        function navigateToTab(tab) {
+            const routes = {
+                'home': 'home-main.html',
+                'calendar': 'calendar.html',
+                'subscription': 'subscription.html',
+                'mypage': 'mypage.html'
+            };
+            if (routes[tab]) {
+                window.location.href = routes[tab];
+            }
+        }
+
+        function confirmReservation() {
+            showToast('예약이 완료되었습니다!');
+        }
+
+        // Consultation type selection
+        document.querySelectorAll('.type-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                showToast(this.querySelector('.type-label').textContent + ' 선택됨');
+            });
+        });
+
+        // Doctor selection
+        document.querySelectorAll('.doctor-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                showToast(this.querySelector('.doctor-name').textContent + ' 선택됨');
+            });
+        });
+
+        // Time slot selection
+        document.querySelectorAll('.time-slot:not(.disabled)').forEach(slot => {
+            slot.addEventListener('click', function() {
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                showToast(this.textContent + ' 선택됨');
+            });
+        });
+    </script>
+</body>
+</html>

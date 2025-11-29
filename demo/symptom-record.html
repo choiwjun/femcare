@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - 증상 기록</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding-bottom: 100px;
+        }
+
+        .navbar {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .navbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8C6762;
+        }
+
+        .spacer {
+            width: 36px;
+        }
+
+        .content {
+            padding: 0 20px 20px;
+        }
+
+        .date-section {
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .date-label {
+            font-size: 14px;
+            color: #9B9B9B;
+            margin-bottom: 8px;
+        }
+
+        .date-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8C6762;
+        }
+
+        .section {
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8C6762;
+            margin-bottom: 16px;
+        }
+
+        .symptom-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .symptom-item {
+            padding: 16px 12px;
+            border: 2px solid #E5E5E5;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .symptom-item:hover {
+            border-color: #F7C8C0;
+            background-color: #FFF9F5;
+        }
+
+        .symptom-item.selected {
+            border-color: #F7C8C0;
+            background-color: rgba(247, 200, 192, 0.1);
+        }
+
+        .symptom-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .symptom-label {
+            font-size: 13px;
+            color: #8C6762;
+        }
+
+        .mood-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .mood-item {
+            padding: 12px;
+            border: 2px solid #E5E5E5;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 32px;
+        }
+
+        .mood-item:hover {
+            border-color: #F7C8C0;
+            transform: scale(1.05);
+        }
+
+        .mood-item.selected {
+            border-color: #F7C8C0;
+            background-color: rgba(247, 200, 192, 0.1);
+        }
+
+        .flow-slider {
+            padding: 20px 0;
+        }
+
+        .flow-level {
+            font-size: 18px;
+            font-weight: 600;
+            color: #F7C8C0;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #F5EEE8 0%, #F7C8C0 100%);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            background: #F7C8C0;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(247, 200, 192, 0.4);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            background: #F7C8C0;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(247, 200, 192, 0.4);
+            border: none;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #E5E5E5;
+            border-radius: 16px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: #F7C8C0;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: #F7C8C0;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .save-btn:hover {
+            background-color: #F5A97F;
+            transform: scale(1.02);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #7BC9A6;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="navbar">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <div class="navbar-title">증상 기록</div>
+            <div class="spacer"></div>
+        </div>
+
+        <div class="content">
+            <!-- Date -->
+            <div class="date-section">
+                <div class="date-label">기록 날짜</div>
+                <div class="date-value">2025년 11월 28일</div>
+            </div>
+
+            <!-- Symptoms -->
+            <div class="section">
+                <div class="section-title">증상 선택 (복수 선택 가능)</div>
+                <div class="symptom-grid">
+                    <div class="symptom-item" data-symptom="cramps">
+                        <div class="symptom-icon">💢</div>
+                        <div class="symptom-label">생리통</div>
+                    </div>
+                    <div class="symptom-item" data-symptom="headache">
+                        <div class="symptom-icon">🤕</div>
+                        <div class="symptom-label">두통</div>
+                    </div>
+                    <div class="symptom-item" data-symptom="backache">
+                        <div class="symptom-icon">🔥</div>
+                        <div class="symptom-label">요통</div>
+                    </div>
+                    <div class="symptom-item" data-symptom="bloating">
+                        <div class="symptom-icon">🎈</div>
+                        <div class="symptom-label">복부팽만</div>
+                    </div>
+                    <div class="symptom-item" data-symptom="fatigue">
+                        <div class="symptom-icon">😴</div>
+                        <div class="symptom-label">피로</div>
+                    </div>
+                    <div class="symptom-item" data-symptom="nausea">
+                        <div class="symptom-icon">🤢</div>
+                        <div class="symptom-label">메스꺼움</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mood -->
+            <div class="section">
+                <div class="section-title">기분 상태</div>
+                <div class="mood-options">
+                    <div class="mood-item" data-mood="great">😄</div>
+                    <div class="mood-item" data-mood="good">🙂</div>
+                    <div class="mood-item selected" data-mood="okay">😐</div>
+                    <div class="mood-item" data-mood="sad">😔</div>
+                    <div class="mood-item" data-mood="angry">😠</div>
+                </div>
+            </div>
+
+            <!-- Flow Level -->
+            <div class="section">
+                <div class="section-title">출혈량</div>
+                <div class="flow-slider">
+                    <div class="flow-level" id="flowLevel">보통</div>
+                    <input type="range" min="1" max="5" value="3" class="slider" id="flowSlider">
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="section">
+                <div class="section-title">메모 (선택)</div>
+                <textarea class="notes-textarea" placeholder="오늘의 상태나 특이사항을 자유롭게 기록해보세요"></textarea>
+            </div>
+
+            <button class="save-btn" onclick="saveRecord()">기록 저장하기</button>
+        </div>
+
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        const flowLevels = ['매우 적음', '적음', '보통', '많음', '매우 많음'];
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function goBack() {
+            window.location.href = 'home-main.html';
+        }
+
+        function saveRecord() {
+            showToast('기록이 저장되었습니다!');
+            setTimeout(() => goBack(), 1500);
+        }
+
+        // Symptom selection
+        document.querySelectorAll('.symptom-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+
+        // Mood selection
+        document.querySelectorAll('.mood-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.mood-item').forEach(m => m.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Flow slider
+        const flowSlider = document.getElementById('flowSlider');
+        const flowLevel = document.getElementById('flowLevel');
+
+        flowSlider.addEventListener('input', function() {
+            const level = parseInt(this.value);
+            flowLevel.textContent = flowLevels[level - 1];
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FemCare - 마이페이지</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: #F5EEE8;
+            color: #8C6762;
+        }
+
+        .mobile-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #F5EEE8;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #F7C8C0 0%, #F5A97F 100%);
+            padding: 40px 20px 30px;
+            color: #FFFFFF;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+            background-color: #FFFFFF;
+            border-radius: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .stat-card {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 16px;
+            padding: 16px 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .menu-section {
+            background-color: #FFFFFF;
+            border-radius: 22px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid #F5EEE8;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background-color: #FFF9F5;
+        }
+
+        .menu-icon {
+            font-size: 24px;
+            margin-right: 16px;
+        }
+
+        .menu-text {
+            flex: 1;
+            font-size: 15px;
+            color: #8C6762;
+        }
+
+        .menu-arrow {
+            font-size: 18px;
+            color: #9B9B9B;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #9B9B9B;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #FFFFFF;
+            color: #E89B9B;
+            border: 2px solid #E89B9B;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: #E89B9B;
+            color: #FFFFFF;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 420px;
+            width: 100%;
+            background-color: #FFFFFF;
+            border-top: 1px solid #E5E5E5;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 8px 16px;
+        }
+
+        .tab-icon {
+            font-size: 24px;
+        }
+
+        .tab-label {
+            font-size: 11px;
+            color: #9B9B9B;
+        }
+
+        .tab-item.active .tab-label {
+            color: #F7C8C0;
+            font-weight: 600;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #7BC9A6;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="profile-section">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-info">
+                    <div class="profile-name">김서연님</div>
+                    <div class="profile-email">seoyeon@email.com</div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">28</div>
+                    <div class="stat-label">평균 주기</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">AI 분석</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">43</div>
+                    <div class="stat-label">기록일</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Account -->
+            <div class="section-title">계정</div>
+            <div class="menu-section">
+                <div class="menu-item" onclick="showToast('프로필 편집')">
+                    <span class="menu-icon">✏️</span>
+                    <span class="menu-text">프로필 편집</span>
+                    <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item" onclick="showToast('건강 정보 관리')">
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-text">건강 정보 관리</span>
+                    <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item" onclick="showToast('알림 설정')">
+                    <span class="menu-icon">🔔</span>
+                    <span class="menu-text">알림 설정</span>
+                    <span class="menu-arrow">›</span>
+                </div>
+            </div>
+
+            <!-- Subscription -->
+            <div class="section-title">구독 및 결제</div>
+            <div class="menu-section">
+                <div class="menu-item" onclick="showToast('구독 관리')">
+                    <span class="menu-icon">📦</span>
+                    <span class="menu-text">구독 관리</span>
+                    <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item" onclick="showToast('결제 수단 관리')">
+                    <span class="menu-icon">💳</span>
+                    <span class="menu-text">결제 수단 관리</span>
+                    <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item" onclick="showToast('배송지 관리')">
+                    <span class="menu-icon">📍</span>
+                    <span class="menu-text">배송지 관리</span>
+                    <span class="menu-arrow">›</span>
+                </div>
+            </div>
+
+            <!-- App -->
+            <div class="section-title">앱 설정</div>
+            <div class="menu-section">
+                <div class="menu-item" onclick="showToast('공지사항')">
+                    <span class="menu-icon">📢</span>
+                    <span class="menu-text">공지사항</span>
+                    <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item" onclick="showToast('고객센터')">
+                    <span class="menu-icon">💬</span>
+                    <span class="menu-text">고객센터</span>
+                    <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item" onclick="showToast('앱 정보')">
+                    <span class="menu-icon">ℹ️</span>
+                    <span class="menu-text">앱 정보</span>
+                    <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item" onclick="showToast('개인정보 처리방침')">
+                    <span class="menu-icon">🔒</span>
+                    <span class="menu-text">개인정보 처리방침</span>
+                    <span class="menu-arrow">›</span>
+                </div>
+            </div>
+
+            <button class="logout-btn" onclick="logout()">로그아웃</button>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <div class="tab-item" onclick="navigateToTab('home')">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">홈</div>
+            </div>
+            <div class="tab-item" onclick="navigateToTab('calendar')">
+                <div class="tab-icon">📅</div>
+                <div class="tab-label">캘린더</div>
+            </div>
+            <div class="tab-item" onclick="navigateToTab('subscription')">
+                <div class="tab-icon">📦</div>
+                <div class="tab-label">구독</div>
+            </div>
+            <div class="tab-item" onclick="navigateToTab('consultation')">
+                <div class="tab-icon">💬</div>
+                <div class="tab-label">상담</div>
+            </div>
+            <div class="tab-item active">
+                <div class="tab-icon">👤</div>
+                <div class="tab-label">마이</div>
+            </div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function logout() {
+            if (confirm('로그아웃 하시겠습니까?')) {
+                showToast('로그아웃 되었습니다');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            }
+        }
+
+        function navigateToTab(tab) {
+            const routes = {
+                'home': 'home-main.html',
+                'calendar': 'calendar.html',
+                'subscription': 'subscription.html',
+                'consultation': 'consultation.html'
+            };
+            if (routes[tab]) {
+                window.location.href = routes[tab];
+            }
+        }
+    </script>
+</body>
+</html>
